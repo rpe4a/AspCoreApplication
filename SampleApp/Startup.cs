@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SampleApp.Middleware;
+using SampleApp.MiddlewareExtensions;
 
 namespace SampleApp
 {
@@ -22,10 +19,7 @@ namespace SampleApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             //app.UseRouting();
 
@@ -41,27 +35,23 @@ namespace SampleApp
             //    home.Map("/about", About);
             //});
 
-            app.UseMiddleware<TokenMiddleware>();
+            //app.UseToken("12345");
+            //app.Run(async context => { await context.Response.WriteAsync("Page Not Found"); });
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Page Not Found");
-            });
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<AuthenticationMiddleware>();
+            app.UseMiddleware<RoutingMiddleware>();
+
         }
 
         private static void Index(IApplicationBuilder app)
         {
-            app.Run(async context =>
-            {
-                await context.Response.WriteAsync("Index");
-            });
+            app.Run(async context => { await context.Response.WriteAsync("Index"); });
         }
+
         private static void About(IApplicationBuilder app)
         {
-            app.Run(async context =>
-            {
-                await context.Response.WriteAsync("About");
-            });
+            app.Run(async context => { await context.Response.WriteAsync("About"); });
         }
     }
 }
