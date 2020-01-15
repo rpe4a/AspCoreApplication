@@ -21,6 +21,7 @@ namespace SampleApp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    //webBuilder.UseWebRoot("Bla bla bla");
                 });
     }
 }

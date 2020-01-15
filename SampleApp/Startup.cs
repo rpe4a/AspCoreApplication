@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SampleApp.Middleware;
@@ -21,37 +22,13 @@ namespace SampleApp
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
-            //app.UseRouting();
+            app.UseStaticFiles();
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapGet("/",
-            //        context => context.Response.WriteAsync($"Application name: {env.ApplicationName}"));
-            //});
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("Hello World").ConfigureAwait(false);
+            });
 
-            //app.Map("/home", home =>
-            //{
-            //    home.Map("/index", Index);
-            //    home.Map("/about", About);
-            //});
-
-            //app.UseToken("12345");
-            //app.Run(async context => { await context.Response.WriteAsync("Page Not Found"); });
-
-            app.UseMiddleware<ErrorHandlingMiddleware>();
-            app.UseMiddleware<AuthenticationMiddleware>();
-            app.UseMiddleware<RoutingMiddleware>();
-
-        }
-
-        private static void Index(IApplicationBuilder app)
-        {
-            app.Run(async context => { await context.Response.WriteAsync("Index"); });
-        }
-
-        private static void About(IApplicationBuilder app)
-        {
-            app.Run(async context => { await context.Response.WriteAsync("About"); });
         }
     }
 }
