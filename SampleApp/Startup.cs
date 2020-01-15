@@ -20,15 +20,44 @@ namespace SampleApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            //env.EnvironmentName = "Production";
 
-            app.UseStaticFiles();
-
-            app.Run(async (context) =>
+            if (env.IsDevelopment())
             {
-                await context.Response.WriteAsync("Hello World").ConfigureAwait(false);
-            });
+                app.UseDeveloperExceptionPage();
+            }
+            //else
+            //{
+            //    app.UseExceptionHandler("/error");
+            //}
 
+            //app.Map("/error",
+            //    builder => builder.Run(async context =>
+            //    {
+            //        await context.Response.WriteAsync("Divide by zero!").ConfigureAwait(false);
+            //    }));
+
+
+            //app.Run(async (context) =>
+            //{
+            //    int x = 0;
+            //    int y = 8 / x;
+            //    await context.Response.WriteAsync($"Result = {y}");
+            //});
+
+            //app.UseStatusCodePages();
+
+            app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
+
+            app.Map("/error", ap => ap.Run(async context =>
+            {
+                await context.Response.WriteAsync($"Err: {context.Request.Query["code"]}");
+            }));
+
+            app.Map("/hello", ap => ap.Run(async (context) =>
+            {
+                await context.Response.WriteAsync($"Hello ASP.NET Core");
+            }));
         }
     }
 }
