@@ -26,38 +26,23 @@ namespace SampleApp
             {
                 app.UseDeveloperExceptionPage();
             }
-            //else
-            //{
-            //    app.UseExceptionHandler("/error");
-            //}
-
-            //app.Map("/error",
-            //    builder => builder.Run(async context =>
-            //    {
-            //        await context.Response.WriteAsync("Divide by zero!").ConfigureAwait(false);
-            //    }));
-
-
-            //app.Run(async (context) =>
-            //{
-            //    int x = 0;
-            //    int y = 8 / x;
-            //    await context.Response.WriteAsync($"Result = {y}");
-            //});
-
-            //app.UseStatusCodePages();
-
+            else
+            {
+                app.UseHsts();
+            }
+            
             app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
+            app.UseHttpsRedirection();
 
             app.Map("/error", ap => ap.Run(async context =>
             {
                 await context.Response.WriteAsync($"Err: {context.Request.Query["code"]}");
             }));
 
-            app.Map("/hello", ap => ap.Run(async (context) =>
+            app.Run(async (context) =>
             {
-                await context.Response.WriteAsync($"Hello ASP.NET Core");
-            }));
+                await context.Response.WriteAsync("Hello ASP.NET Core");
+            });
         }
     }
 }
