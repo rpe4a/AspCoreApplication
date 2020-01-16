@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,10 +12,13 @@ namespace SampleApp
 {
     public class Startup
     {
+        private IServiceCollection services;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            this.services = services;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,22 +30,25 @@ namespace SampleApp
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
             
-            app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
-            app.UseHttpsRedirection();
-
-            app.Map("/error", ap => ap.Run(async context =>
-            {
-                await context.Response.WriteAsync($"Err: {context.Request.Query["code"]}");
-            }));
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello ASP.NET Core");
+                var sb = new StringBuilder();
+                sb.Append("<h1>Все сервисы</h1>");
+                sb.Append("<table>");
+                sb.Append("<tr><th>Тип</th><th>Lifetime</th><th>Реализация</th></tr>");
+                foreach (var svc in services)
+                {
+                    sb.Append("<tr>");
+                    sb.Append($"<td>{svc.ServiceType.FullName}</td>");
+                    sb.Append($"<td>{svc.Lifetime}</td>");
+                    sb.Append($"<td>{svc.ImplementationType?.FullName}</td>");
+                    sb.Append("</tr>");
+                }
+                sb.Append("</table>");
+                context.Response.ContentType = "text/html;charset=utf-8";
+                await context.Response.WriteAsync(sb.ToString());
             });
         }
     }
