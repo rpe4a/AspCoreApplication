@@ -7,22 +7,27 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SampleApp.Middleware;
 using SampleApp.MiddlewareExtensions;
+using SampleApp.ServiceExtensions;
+using SampleApp.Services;
 
 namespace SampleApp
 {
     public class Startup
     {
-        private IServiceCollection services;
-
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            this.services = services;
+            services.AddTransient<IMessageSender, EmailMessageSender>();
+            services.AddTimeService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            IMessageSender messageSender,
+            TimeService timeService)
         {
             //env.EnvironmentName = "Production";
 
@@ -30,25 +35,12 @@ namespace SampleApp
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
 
             app.Run(async (context) =>
             {
-                var sb = new StringBuilder();
-                sb.Append("<h1>Все сервисы</h1>");
-                sb.Append("<table>");
-                sb.Append("<tr><th>Тип</th><th>Lifetime</th><th>Реализация</th></tr>");
-                foreach (var svc in services)
-                {
-                    sb.Append("<tr>");
-                    sb.Append($"<td>{svc.ServiceType.FullName}</td>");
-                    sb.Append($"<td>{svc.Lifetime}</td>");
-                    sb.Append($"<td>{svc.ImplementationType?.FullName}</td>");
-                    sb.Append("</tr>");
-                }
-                sb.Append("</table>");
-                context.Response.ContentType = "text/html;charset=utf-8";
-                await context.Response.WriteAsync(sb.ToString());
+                await context.Response.WriteAsync(messageSender.Send() + timeService.GetTime())
+                    .ConfigureAwait(false);
             });
         }
     }
