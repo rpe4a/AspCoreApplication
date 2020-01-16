@@ -19,7 +19,14 @@ namespace SampleApp
     {
         public Startup(IConfiguration configuration)
         {
-            AppConfiguration = new ConfigurationBuilder().AddJsonFile("config.json").Build();
+            AppConfiguration = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    {"setting1", "true"}
+                })
+                .AddJsonFile("config.json")
+                .AddConfiguration(configuration)
+                .Build();
         }
 
         public IConfiguration AppConfiguration { get; }
@@ -28,6 +35,7 @@ namespace SampleApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IConfiguration>((p) => AppConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,10 +49,7 @@ namespace SampleApp
             var color = AppConfiguration["color"];
             string text = AppConfiguration["namespace:class:method"];
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync($"<p style='color:{color};'>{text}</p>");
-            });
+            app.Run(async (context) => { await context.Response.WriteAsync($"<p style='color:{color};'>{text}</p>"); });
         }
     }
 }
