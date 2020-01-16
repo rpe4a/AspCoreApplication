@@ -19,6 +19,7 @@ namespace SampleApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IMessageSender, EmailMessageSender>();
+            services.AddTransient<MessageService>();
             services.AddTimeService();
         }
 
@@ -26,7 +27,7 @@ namespace SampleApp
         public void Configure(
             IApplicationBuilder app,
             IWebHostEnvironment env,
-            IMessageSender messageSender,
+            MessageService messageService,
             TimeService timeService)
         {
             //env.EnvironmentName = "Production";
@@ -39,7 +40,12 @@ namespace SampleApp
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync(messageSender.Send() + timeService.GetTime())
+                //не рекомендуется так делать, но можно
+                var messageSender = context.RequestServices.GetService<IMessageSender>();
+
+                messageSender = app.ApplicationServices.GetService<IMessageSender>();
+
+                await context.Response.WriteAsync(messageService.Send()+ messageSender.Send() + timeService.GetTime())
                     .ConfigureAwait(false);
             });
         }
