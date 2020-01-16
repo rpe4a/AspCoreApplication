@@ -19,7 +19,7 @@ namespace SampleApp
     {
         public Startup(IConfiguration configuration)
         {
-            AppConfiguration = configuration;
+            AppConfiguration = new ConfigurationBuilder().AddJsonFile("config.json").Build();
         }
 
         public IConfiguration AppConfiguration { get; }
@@ -38,7 +38,13 @@ namespace SampleApp
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) => { await context.Response.WriteAsync("Hello").ConfigureAwait(false); });
+            var color = AppConfiguration["color"];
+            string text = AppConfiguration["namespace:class:method"];
+
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync($"<p style='color:{color};'>{text}</p>");
+            });
         }
     }
 }
