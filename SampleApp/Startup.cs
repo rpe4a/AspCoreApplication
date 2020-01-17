@@ -38,21 +38,27 @@ namespace SampleApp
         {
             services.AddSingleton<IConfiguration>((p) => AppConfiguration);
             services.AddSingleton<Config>((p) => AppConfiguration.Get<Config>());
-
-            //Для передачи с помощью Options
-            services.Configure<Person>(AppConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Config config)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMiddleware<PersonMiddleware>();
-            app.Run(async (context) => { await context.Response.WriteAsync($"<p style='color:{config.Color};'>{config.Text}</p>"); });
+            app.Use(async (context, next) =>
+            {
+                context.Items["text"] = "Text from HttpContext.Items";
+                await next.Invoke();
+            });
+
+            app.Run(async (context) =>
+            {
+                context.Response.ContentType = "text/html; charset=utf-8";
+                await context.Response.WriteAsync($"Текст: {context.Items["text"]}");
+            });
         }
     }
 }
