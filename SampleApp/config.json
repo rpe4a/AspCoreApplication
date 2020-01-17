@@ -1,4 +1,15 @@
 {
   "color": "red",
-  "text": "welcome!"
+  "text": "welcome!",
+  "age": 18,
+  "name": "Tom",
+  "languages": [
+    "English",
+    "German",
+    "Spanish"
+  ],
+  "company": {
+    "title": "Microsoft",
+    "country": "USA"
+  }
 }

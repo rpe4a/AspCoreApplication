@@ -1,4 +1,4 @@
-﻿namespace SampleApp
+﻿namespace SampleApp.Settings
 {
     public class Config
     {

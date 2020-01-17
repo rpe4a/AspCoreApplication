@@ -12,6 +12,7 @@ using SampleApp.Middleware;
 using SampleApp.MiddlewareExtensions;
 using SampleApp.ServiceExtensions;
 using SampleApp.Services;
+using SampleApp.Settings;
 
 namespace SampleApp
 {
@@ -37,6 +38,9 @@ namespace SampleApp
         {
             services.AddSingleton<IConfiguration>((p) => AppConfiguration);
             services.AddSingleton<Config>((p) => AppConfiguration.Get<Config>());
+
+            //Для передачи с помощью Options
+            services.Configure<Person>(AppConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,8 +51,7 @@ namespace SampleApp
                 app.UseDeveloperExceptionPage();
             }
 
-            //AppConfiguration.Bind(config);
-
+            app.UseMiddleware<PersonMiddleware>();
             app.Run(async (context) => { await context.Response.WriteAsync($"<p style='color:{config.Color};'>{config.Text}</p>"); });
         }
     }
