@@ -48,16 +48,18 @@ namespace SampleApp
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Use(async (context, next) =>
-            {
-                context.Items["text"] = "Text from HttpContext.Items";
-                await next.Invoke();
-            });
-
             app.Run(async (context) =>
             {
-                context.Response.ContentType = "text/html; charset=utf-8";
-                await context.Response.WriteAsync($"Текст: {context.Items["text"]}");
+                if (context.Request.Cookies.ContainsKey("name"))
+                {
+                    string name = context.Request.Cookies["name"];
+                    await context.Response.WriteAsync($"Hello {name}!");
+                }
+                else
+                {
+                    context.Response.Cookies.Append("name", "Tom");
+                    await context.Response.WriteAsync("Hello World!");
+                }
             });
         }
     }
