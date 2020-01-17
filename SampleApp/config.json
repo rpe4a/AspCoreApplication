@@ -1,9 +1,4 @@
 {
   "color": "red",
-  "text": "welcome!",
-  "namespace": {
-    "class": {
-      "method": "AddJson"
-    }
-  }
+  "text": "welcome!"
 }

@@ -36,20 +36,20 @@ namespace SampleApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>((p) => AppConfiguration);
+            services.AddSingleton<Config>((p) => AppConfiguration.Get<Config>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Config config)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            var color = AppConfiguration["color"];
-            string text = AppConfiguration["namespace:class:method"];
+            //AppConfiguration.Bind(config);
 
-            app.Run(async (context) => { await context.Response.WriteAsync($"<p style='color:{color};'>{text}</p>"); });
+            app.Run(async (context) => { await context.Response.WriteAsync($"<p style='color:{config.Color};'>{config.Text}</p>"); });
         }
     }
 }
