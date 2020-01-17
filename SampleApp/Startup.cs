@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SampleApp.Middleware;
 using SampleApp.MiddlewareExtensions;
+using SampleApp.Model;
 using SampleApp.ServiceExtensions;
 using SampleApp.Services;
 using SampleApp.Settings;
@@ -38,6 +41,14 @@ namespace SampleApp
         {
             services.AddSingleton<IConfiguration>((p) => AppConfiguration);
             services.AddSingleton<Config>((p) => AppConfiguration.Get<Config>());
+
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".MyApp.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(3600);
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,16 +59,19 @@ namespace SampleApp
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSession();
+
             app.Run(async (context) =>
             {
-                if (context.Request.Cookies.ContainsKey("name"))
+                if (context.Session.Keys.Contains("user"))
                 {
-                    string name = context.Request.Cookies["name"];
-                    await context.Response.WriteAsync($"Hello {name}!");
+                    var user = context.Session.Get<User>("user");
+                    await context.Response.WriteAsync($"Hello {user.Name}, your age: {user.Age}!");
                 }
                 else
                 {
-                    context.Response.Cookies.Append("name", "Tom");
+                    var user = new User { Name = "Tom", Age = 22 };
+                    context.Session.Set<User>("user", user);
                     await context.Response.WriteAsync("Hello World!");
                 }
             });
