@@ -4,11 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,6 +62,21 @@ namespace SampleApp
             var myRouteHandler = new RouteHandler(Handle);
             var routeBuilder = new RouteBuilder(app, myRouteHandler);
             routeBuilder.MapRoute("default", "{action=Index}/{name}-{year}");
+            routeBuilder.MapRoute(
+                name: "default",
+                template: "{controller}/{action}/{id?}",
+                defaults: new { controller = "Home", action = "Index" },
+                constraints: new
+                {
+                    action = new CompositeRouteConstraint(new IRouteConstraint[]
+                    {
+                        new AlphaRouteConstraint(),
+                        new MinLengthRouteConstraint(5)
+                    })
+                });
+            routeBuilder.MapRoute("default", "{controller:regex(^H.*)}/{action}/{id?}");
+            routeBuilder.MapRoute("default", "{controller:length(4)}/{action:alpha}/{id:range(4,100)}");
+
             app.UseRouter(routeBuilder.Build());
 
             app.Run(async (context) =>
