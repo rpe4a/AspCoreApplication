@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SampleApp.Middleware;
 using SampleApp.MiddlewareExtensions;
 using SampleApp.Model;
@@ -41,39 +42,25 @@ namespace SampleApp
         {
             services.AddSingleton<IConfiguration>((p) => AppConfiguration);
             services.AddSingleton<Config>((p) => AppConfiguration.Get<Config>());
-
-            services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                options.Cookie.Name = ".MyApp.Session";
-                options.IdleTimeout = TimeSpan.FromSeconds(3600);
-                options.Cookie.IsEssential = true;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSession();
-
             app.Run(async (context) =>
             {
-                if (context.Session.Keys.Contains("user"))
-                {
-                    var user = context.Session.Get<User>("user");
-                    await context.Response.WriteAsync($"Hello {user.Name}, your age: {user.Age}!");
-                }
-                else
-                {
-                    var user = new User { Name = "Tom", Age = 22 };
-                    context.Session.Set<User>("user", user);
-                    await context.Response.WriteAsync("Hello World!");
-                }
+                logger.LogCritical("LogCritical {0}", context.Request.Path);
+                logger.LogDebug("LogDebug {0}", context.Request.Path);
+                logger.LogError("LogError {0}", context.Request.Path);
+                logger.LogInformation("LogInformation {0}", context.Request.Path);
+                logger.LogWarning("LogWarning {0}", context.Request.Path);
+
+                await context.Response.WriteAsync("Hello World!");
             });
         }
     }
