@@ -21,6 +21,7 @@ namespace SampleApp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureLogging(config => { config.SetMinimumLevel(LogLevel.Trace); });
                 });
     }
 }
