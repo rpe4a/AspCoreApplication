@@ -38,6 +38,18 @@ namespace SampleApp.Controllers
             return "Спасибо, " + order.User + ", за покупку!";
         }
 
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Login(string login, string password)
+        {
+            string authData = $"Login: {login}   Password: {password}";
+            return Content(authData);
+        }
+
         public ActionResult GetMessage()
         {
             return PartialView("_GetMessage");
