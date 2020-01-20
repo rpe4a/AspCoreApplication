@@ -5,6 +5,9 @@
 }
 
 <h3>Смартфоны</h3>
+
+@{ await Html.RenderPartialAsync("_GetMessage"); }
+
 <table class=table-condensed>
     <tr>
         <td>Модель</td>
@@ -12,13 +15,16 @@
         <td>Цена</td>
         <td></td>
     </tr>
+
     @foreach (var phone in Model)
     {
         <tr>
             <td>@phone.Name</td>
             <td>@phone.Company</td>
             <td>@phone.Price</td>
-            <td><a href=~/Home/Buy/@phone.Id>Купить</a></td>
+            <td>
+                <a href=~/Home/Buy/@phone.Id>Купить</a>
+            </td>
         </tr>
     }
 </table>

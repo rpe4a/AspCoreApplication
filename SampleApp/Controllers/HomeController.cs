@@ -37,5 +37,10 @@ namespace SampleApp.Controllers
 
             return "Спасибо, " + order.User + ", за покупку!";
         }
+
+        public ActionResult GetMessage()
+        {
+            return PartialView("_GetMessage");
+        }
     }
 }
