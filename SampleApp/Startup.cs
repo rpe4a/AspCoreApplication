@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,24 +54,26 @@ namespace SampleApp
             {
                 app.UseDeveloperExceptionPage();
             }
+            var
+                routeBuilder = new RouteBuilder(app);
 
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder.AddConsole();
-                builder.AddDebug();
-                builder.AddProvider(new FileLoggerProvider(Path.Combine(Directory.GetCurrentDirectory(), "log")));
-            });
+            routeBuilder.MapRoute("{controller}/{action}",
+                async context => {
+                    context.Response.ContentType = "text/html; charset=utf-8";
+                    await context.Response.WriteAsync("двухсегментный запрос");
+                });
 
-            var logger = loggerFactory.CreateLogger<Startup>();
+
+            routeBuilder.MapRoute("{controller}/{action}/{id}",
+                async context => {
+                    context.Response.ContentType = "text/html; charset=utf-8";
+                    await context.Response.WriteAsync("трехсегментный запрос");
+                });
+
+            app.UseRouter(routeBuilder.Build());
 
             app.Run(async (context) =>
             {
-                logger.LogCritical("LogCritical {0}", context.Request.Path);
-                logger.LogDebug("LogDebug {0}", context.Request.Path);
-                logger.LogError("LogError {0}", context.Request.Path);
-                logger.LogInformation("LogInformation {0}", context.Request.Path);
-                logger.LogWarning("LogWarning {0}", context.Request.Path);
-
                 await context.Response.WriteAsync("Hello World!");
             });
         }
