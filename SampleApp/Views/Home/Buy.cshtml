@@ -1,4 +1,4 @@
-﻿@model object
+﻿@inject SampleApp.Services.TimeService Timer
 
 @{
     ViewData["Title"] = "Заказ";
@@ -8,7 +8,7 @@
 
 <form method="post" class="form-horizontal" role="form">
     <input type="hidden" value="@ViewBag.PhoneId" name="PhoneId" />
-    <p>Для оформления покупки заполните следующие поля:</p>
+    <p>Для оформления покупки заполните следующие поля. Текущее время: @Timer.GetTime()</p>
     <div class="form-group">
         <label for="User" class="col-md-2 control-label">Имя:</label>
         <div class="col-md-4">

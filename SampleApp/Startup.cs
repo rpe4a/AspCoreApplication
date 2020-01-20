@@ -50,7 +50,7 @@ namespace SampleApp
         {
             services.AddDbContext<AppDbContext>(options => options
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
-
+            services.AddTransient<TimeService>();
             services.AddMvc();
         }
 
