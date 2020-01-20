@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
@@ -57,6 +58,7 @@ namespace SampleApp
             {
                 builder.AddConsole();
                 builder.AddDebug();
+                builder.AddProvider(new FileLoggerProvider(Path.Combine(Directory.GetCurrentDirectory(), "log")));
             });
 
             var logger = loggerFactory.CreateLogger<Startup>();
