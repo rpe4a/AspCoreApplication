@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<EntitiesLib.Models.Phone>
 
 @{
-    Layout = "_Layout";
+    ViewData["Title"] = "Каталог";
 }
 
 <h3>Смартфоны</h3>
-<table class="table-condensed">
+<table class=table-condensed>
     <tr>
         <td>Модель</td>
         <td>Производитель</td>
@@ -18,7 +18,12 @@
             <td>@phone.Name</td>
             <td>@phone.Company</td>
             <td>@phone.Price</td>
-            <td><a href="~/Home/Buy/@phone.Id">Купить</a></td>
+            <td><a href=~/Home/Buy/@phone.Id>Купить</a></td>
         </tr>
     }
 </table>
+
+@section Footer
+{
+    Все права защищены. Site Corp. 2016.
+}
