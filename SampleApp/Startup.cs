@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,7 @@ namespace SampleApp
         {
             services.AddSingleton<IConfiguration>((p) => AppConfiguration);
             services.AddSingleton<Config>((p) => AppConfiguration.Get<Config>());
+            services.AddRouting();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,28 +56,25 @@ namespace SampleApp
             {
                 app.UseDeveloperExceptionPage();
             }
-            var
-                routeBuilder = new RouteBuilder(app);
 
-            routeBuilder.MapRoute("{controller}/{action}",
-                async context => {
-                    context.Response.ContentType = "text/html; charset=utf-8";
-                    await context.Response.WriteAsync("двухсегментный запрос");
-                });
-
-
-            routeBuilder.MapRoute("{controller}/{action}/{id}",
-                async context => {
-                    context.Response.ContentType = "text/html; charset=utf-8";
-                    await context.Response.WriteAsync("трехсегментный запрос");
-                });
-
+            var myRouteHandler = new RouteHandler(Handle);
+            var routeBuilder = new RouteBuilder(app, myRouteHandler);
+            routeBuilder.MapRoute("default", "{action=Index}/{name}-{year}");
             app.UseRouter(routeBuilder.Build());
 
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync("Hello World!");
             });
+        }
+
+        private async Task Handle(HttpContext context)
+        {
+            var routeValues = context.GetRouteData().Values;
+            var action = routeValues["action"].ToString();
+            var name = routeValues["name"].ToString();
+            var year = routeValues["year"].ToString();
+            await context.Response.WriteAsync($"action: {action} | name: {name} | year:{year}");
         }
     }
 }
