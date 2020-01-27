@@ -2,7 +2,7 @@
 
 <form asp-antiforgery="true" asp-action="Create" asp-controller="Home">
     <div>
-        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div class="validation" asp-validation-summary="All"></div>
         <div>
             <label asp-for="Name"></label><br />
             <input type="text" asp-for="Name" />
@@ -17,11 +17,6 @@
             <label asp-for="Password"></label><br />
             <input asp-for="Password" />
             <span asp-validation-for="Password"></span>
-        </div>
-        <div>
-            <label asp-for="PasswordConfirm"></label><br />
-            <input asp-for="PasswordConfirm" />
-            <span asp-validation-for="PasswordConfirm"></span>
         </div>
         <div>
             <label asp-for="Age"></label><br />

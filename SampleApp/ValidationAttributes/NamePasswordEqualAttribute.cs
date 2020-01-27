@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using SampleApp.Models;
 
 namespace SampleApp.ValidationAttributes
 {
-    public class NamePasswordEqualAttribute:ValidationAttribute
+    public class NamePasswordEqualAttribute : ValidationAttribute
     {
         public NamePasswordEqualAttribute()
         {
@@ -18,10 +14,7 @@ namespace SampleApp.ValidationAttributes
         {
             var person = value as Person;
 
-            if (person.Name == person.Password)
-            {
-                return false;
-            }
+            if (person.Name == person.Password) return false;
             return true;
         }
 
