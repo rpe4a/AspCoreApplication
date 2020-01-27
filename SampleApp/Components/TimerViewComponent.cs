@@ -1,14 +1,24 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SampleApp.Services;
 
 namespace SampleApp.Components
 {
     public class Timer : ViewComponent
     {
-        public Task<string> InvokeAsync()
+        private readonly TimeService _service;
+
+        public Timer(TimeService service)
         {
-            return Task.FromResult($"Текущее время: {DateTime.Now.ToString("hh:mm:ss")}");
+            _service = service;
+        }
+
+        public string Invoke(bool includeSeconds)
+        {
+            if (includeSeconds)
+                return $"Текущее время: {_service.GetTime()}";
+            else
+                return $"Текущее время: {DateTime.Now.ToString("hh:mm")}";
         }
     }
 }

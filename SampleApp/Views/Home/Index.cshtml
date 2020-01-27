@@ -15,14 +15,7 @@
 
 <a asp-controller="Home" asp-action="Create">Создать пользователя</a>
 
-<summary>
-    <timer></timer>
-    <timer color="red"></timer>
-    <timer color="green"></timer>
-    <date></date>
-</summary>
-
-@await Component.InvokeAsync(nameof(Timer))
+@await Component.InvokeAsync(nameof(Timer), new {includeSeconds = false})
 
 <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
         asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
