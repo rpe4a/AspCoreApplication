@@ -1,0 +1,22 @@
+﻿@model object
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "_Layout";
+}
+
+<h2>Create</h2>
+@using (Html.BeginForm("Create", "Home", FormMethod.Post))
+{
+    <p>
+        <label>Имя</label><br />
+        @Html.TextBox("Name")
+    </p>
+    <p>
+        <label>Возраст</label><br />
+        @Html.TextBox("Age", "", new { type = "number" })
+    </p>
+    <p>
+        <input type="submit" value="Отправить" />
+    </p>
+}

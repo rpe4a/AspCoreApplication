@@ -27,9 +27,10 @@ namespace SampleApp.Controllers
             if (id == null) return RedirectToAction("Index");
 
             ViewBag.PhoneId = id;
-            
+
             return View();
         }
+
         [HttpPost]
         public string Buy(Order order)
         {
@@ -44,6 +45,7 @@ namespace SampleApp.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Login(string login, string password)
         {
@@ -58,6 +60,7 @@ namespace SampleApp.Controllers
                 string userInfo = $"Id: {user.Id}  Name: {user.Name}  Age: {user.Age}  HasRight: {user.HasRight}";
                 return Content(userInfo);
             }
+
             return Content($"Количество ошибок: {ModelState.ErrorCount}");
         }
 
@@ -69,6 +72,18 @@ namespace SampleApp.Controllers
         public ActionResult GetMessage()
         {
             return PartialView("_GetMessage");
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromForm] string name, [FromForm] int age)
+        {
+            return Content($"{name} - {age}");
         }
     }
 }
