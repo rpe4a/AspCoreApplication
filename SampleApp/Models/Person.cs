@@ -1,12 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using SampleApp.ValidationAttributes;
 
 namespace SampleApp.Models
 {
+    [NamePasswordEqual]
     public class Person
     {
         [Required(ErrorMessage = "Не указано имя")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Длина строки должна быть от 3 до 50 символов")]
+        [PersonName(new[] { "Tom", "Sam", "Alice" }, ErrorMessage = "Недопустимое имя")]
         public string Name { get; set; }
 
         [EmailAddress]
