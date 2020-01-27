@@ -16,7 +16,9 @@
 <a asp-controller="Home" asp-action="Create">Создать пользователя</a>
 
 @await Component.InvokeAsync(nameof(Timer), new {includeSeconds = false})
-
+<div>
+    @await Component.InvokeAsync(nameof(UsersList))
+</div>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
         asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
         asp-fallback-test="window.jQuery"

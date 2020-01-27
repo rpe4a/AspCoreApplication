@@ -13,12 +13,12 @@ namespace SampleApp.Components
             _service = service;
         }
 
-        public string Invoke(bool includeSeconds)
+        public IViewComponentResult Invoke(bool includeSeconds)
         {
             if (includeSeconds)
-                return $"Текущее время: {_service.GetTime()}";
+                return Content($"Текущее время: {_service.GetTime()}");
             else
-                return $"Текущее время: {DateTime.Now.ToString("hh:mm")}";
+                return Content($"Текущее время: {DateTime.Now.ToString("hh:mm")}");
         }
     }
 }
