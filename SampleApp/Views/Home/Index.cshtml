@@ -1,4 +1,5 @@
 ﻿@using SampleApp.App_Code
+@using SampleApp.Components
 
 @model IEnumerable<EntitiesLib.Models.Phone>
 @{
@@ -20,6 +21,8 @@
     <timer color="green"></timer>
     <date></date>
 </summary>
+
+@await Component.InvokeAsync(nameof(Timer))
 
 <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
         asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
