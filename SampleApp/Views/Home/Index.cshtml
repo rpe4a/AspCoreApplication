@@ -5,13 +5,4 @@
     ViewData["Title"] = "Home Page";
 }
 
-@{
-    string[] cities = { "Лондон", "Париж", "Берлин" };
-    string[] countries = { "Великобритания", "Франция", "Германия" };
-}
-
-<h3>Города</h3>
-@Html.CreateListWithTagBuilder(cities)
-<br />
-<h3>Страны</h3>
-@Html.CreateList(countries)
+<a asp-controller="Home" asp-action="Create">Создать пользователя</a>
