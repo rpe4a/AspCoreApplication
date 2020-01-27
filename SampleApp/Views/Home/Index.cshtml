@@ -16,4 +16,18 @@
 <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.3.0/css/bootstrap.min.css"
       asp-fallback-href="~/css/bootstrap.min.css"
       asp-fallback-test-class="hidden" asp-fallback-test-property="visibility" asp-fallback-test-value="hidden"
-      asp-append-version="true"/>
+      asp-append-version="true" />
+<environment names="Development">
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.3.0/css/bootstrap.min.css"
+          asp-fallback-href="~/css/bootstrap.min.css"
+          asp-fallback-test-class="hidden" asp-fallback-test-property="visibility" asp-fallback-test-value="hidden"
+          asp-append-version="true" />
+</environment>
+<environment names="Staging,Production">
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.3.0/css/bootstrap.min.css" />
+</environment>
+
+<p>Время из Index: <b>@DateTime.Now.ToString("HH:mm:ss")</b></p>
+<cache expires-after="@TimeSpan.FromMinutes(10)" expires-on="@DateTime.Now.AddDays(1)" >
+    @await Html.PartialAsync("TimeView")
+</cache>
