@@ -86,5 +86,11 @@ namespace SampleApp.Controllers
             else
                 return View(person);
         }
+
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult CheckEmail(string email)
+        {
+            return Json(email != "admin@mail.ru" && email != "aaa@gmail.com");
+        }
     }
 }
