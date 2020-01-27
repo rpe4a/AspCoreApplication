@@ -1,7 +1,6 @@
-﻿@model IEnumerable<string>
-<h4>Список пользователей</h4>
+﻿<h4>@ViewData["Header"]</h4>
 <ul>
-    @foreach (var user in Model)
+    @foreach (var user in (IEnumerable<string>)ViewBag.Users)
     {
         <li>@user</li>
     }

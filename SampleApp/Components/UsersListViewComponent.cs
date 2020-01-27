@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SampleApp.Components
@@ -17,7 +19,16 @@ namespace SampleApp.Components
 
         public IViewComponentResult Invoke()
         {
-            return View(users);
+            int number = users.Count;
+            // если передан параметр number
+            if (Request.Query.ContainsKey("number"))
+            {
+                Int32.TryParse(Request.Query["number"].ToString(), out number);
+            }
+
+            ViewBag.Users = users.Take(number);
+            ViewData["Header"] = $"Количество пользователей: {number}.";
+            return View();
         }
     }
 }
