@@ -1,4 +1,4 @@
-﻿@model object
+﻿@model SampleApp.Model.User
 
 @{
     ViewBag.Title = "Create";
@@ -9,12 +9,12 @@
 @using (Html.BeginForm("Create", "Home", FormMethod.Post))
 {
     <p>
-        <label>Имя</label><br />
-        @Html.TextBox("Name")
+        @Html.LabelFor(u => u.Name, "Имя")
+        @Html.TextBoxFor(u=> u.Name)
     </p>
     <p>
-        <label>Возраст</label><br />
-        @Html.TextBox("Age", "", new { type = "number" })
+        @Html.LabelFor(u => u.Age, "Вoзраст")
+        @Html.TextBoxFor(u => u.Age, "", new {type = "number"})
     </p>
     <p>
         <input type="submit" value="Отправить" />
