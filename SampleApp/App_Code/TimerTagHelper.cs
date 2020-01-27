@@ -6,9 +6,13 @@ namespace SampleApp.App_Code
 {
     public class TimerTagHelper : TagHelper
     {
+        public string Color { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
+            output.Attributes.SetAttribute("class", "timer");
+            output.Attributes.SetAttribute("style", $"color:{Color};");
             output.Content.SetContent($"Текущее время: {DateTime.Now.ToShortTimeString()}");
         }
     }
@@ -18,6 +22,7 @@ namespace SampleApp.App_Code
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
+            output.TagMode = TagMode.SelfClosing;
             output.Content.SetContent($"Текущая дата: {DateTime.Now.ToString("dd/mm/yyyy")}");
         }
     }
