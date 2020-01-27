@@ -6,6 +6,12 @@
 }
 
 <a asp-controller="Home" asp-action="Create">Создать пользователя</a>
+
+<summary>
+    <timer></timer>
+    <date></date>
+</summary>
+
 <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
         asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
         asp-fallback-test="window.jQuery"
@@ -28,6 +34,6 @@
 </environment>
 
 <p>Время из Index: <b>@DateTime.Now.ToString("HH:mm:ss")</b></p>
-<cache expires-after="@TimeSpan.FromMinutes(10)" expires-on="@DateTime.Now.AddDays(1)" >
+<cache expires-after="@TimeSpan.FromMinutes(10)" expires-on="@DateTime.Now.AddDays(1)">
     @await Html.PartialAsync("TimeView")
 </cache>

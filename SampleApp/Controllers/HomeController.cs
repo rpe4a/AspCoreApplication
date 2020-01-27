@@ -2,7 +2,7 @@
 using EntitiesLib;
 using EntitiesLib.Models;
 using Microsoft.AspNetCore.Mvc;
-using SampleApp.Model;
+using SampleApp.Models;
 
 namespace SampleApp.Controllers
 {

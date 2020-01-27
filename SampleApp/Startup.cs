@@ -21,7 +21,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 using SampleApp.Middleware;
 using SampleApp.MiddlewareExtensions;
-using SampleApp.Model;
 using SampleApp.ServiceExtensions;
 using SampleApp.Services;
 using SampleApp.Settings;

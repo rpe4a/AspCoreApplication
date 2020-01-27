@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace SampleApp.Model
+namespace SampleApp.Models
 {
     [Bind("Name")]
     public class User
