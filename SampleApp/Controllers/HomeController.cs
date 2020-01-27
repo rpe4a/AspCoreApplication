@@ -74,16 +74,17 @@ namespace SampleApp.Controllers
             return PartialView("_GetMessage");
         }
 
-        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
-        public IActionResult Create([FromForm] string name, [FromForm] int age)
+        public IActionResult Create(Person person)
         {
-            return Content($"{name} - {age}");
+            if (ModelState.IsValid)
+                return Content($"{person.Name} - {person.Email}");
+            else
+                return View(person);
         }
     }
 }

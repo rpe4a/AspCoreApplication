@@ -1,22 +1,37 @@
-﻿@model SampleApp.Models.User
+﻿@model SampleApp.Models.Person
 
-@{
-    ViewBag.Title = "Create";
-    Layout = "_Layout";
-}
+<form asp-antiforgery="true" asp-action="Create" asp-controller="Home">
+    <div>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="Name"></label><br />
+            <input type="text" asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div>
+            <label asp-for="Email"></label><br />
+            <input asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label><br />
+            <input asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <label asp-for="Age"></label><br />
+            <input asp-for="Age" />
+            <span asp-validation-for="Age"></span>
+        </div>
+        <div>
+            <input type="submit" value="Save" />
+        </div>
+    </div>
+</form>
 
-<h2>Create</h2>
-@using (Html.BeginForm("Create", "Home", FormMethod.Post))
-{
-    <p>
-        @Html.LabelFor(u => u.Name, "Имя")
-        @Html.TextBoxFor(u=> u.Name)
-    </p>
-    <p>
-        @Html.LabelFor(u => u.Age, "Вoзраст")
-        @Html.TextBoxFor(u => u.Age, "", new {type = "number"})
-    </p>
-    <p>
-        <input type="submit" value="Отправить" />
-    </p>
+
+@section scripts{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
 }
