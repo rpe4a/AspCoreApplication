@@ -1,11 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using SampleApp.Services;
 
 namespace SampleApp.App_Code
 {
     public class TimerTagHelper : TagHelper
     {
+        private readonly TimeService _service;
+
+        public TimerTagHelper(TimeService service)
+        {
+            _service = service;
+        }
+
         public string Color { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -13,16 +23,22 @@ namespace SampleApp.App_Code
             output.TagName = "div";
             output.Attributes.SetAttribute("class", "timer");
             output.Attributes.SetAttribute("style", $"color:{Color};");
-            output.Content.SetContent($"Текущее время: {DateTime.Now.ToShortTimeString()}");
+            output.Content.SetContent($"Текущее время: {_service.GetTime()}");
         }
     }
 
     public class DateTagHelper : TagHelper
     {
+        [ViewContext]
+        [HtmlAttributeNotBound]
+        public ViewContext ViewContext { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            var font = ViewContext?.HttpContext.Request.Query["font"] ?? "Verdana";
+            
+            output.Attributes.SetAttribute("style", $"font-family:{font};font-size:18px;");
             output.TagName = "div";
-            output.TagMode = TagMode.SelfClosing;
             output.Content.SetContent($"Текущая дата: {DateTime.Now.ToString("dd/mm/yyyy")}");
         }
     }
