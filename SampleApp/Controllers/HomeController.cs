@@ -2,6 +2,7 @@
 using EntitiesLib;
 using EntitiesLib.Models;
 using Microsoft.AspNetCore.Mvc;
+using SampleApp.Model;
 
 namespace SampleApp.Controllers
 {
@@ -48,6 +49,21 @@ namespace SampleApp.Controllers
         {
             string authData = $"Login: {login}   Password: {password}";
             return Content(authData);
+        }
+
+        public IActionResult AddUser(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                string userInfo = $"Id: {user.Id}  Name: {user.Name}  Age: {user.Age}  HasRight: {user.HasRight}";
+                return Content(userInfo);
+            }
+            return Content($"Количество ошибок: {ModelState.ErrorCount}");
+        }
+
+        public IActionResult GetUserAgent([FromHeader(Name = "User-Agent")] string userAgent)
+        {
+            return Content(userAgent);
         }
 
         public ActionResult GetMessage()

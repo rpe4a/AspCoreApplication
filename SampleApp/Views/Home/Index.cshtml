@@ -1,35 +1,17 @@
-﻿@model IEnumerable<EntitiesLib.Models.Phone>
+﻿@using SampleApp.App_Code
+
+@model IEnumerable<EntitiesLib.Models.Phone>
+@{
+    ViewData["Title"] = "Home Page";
+}
 
 @{
-    ViewData["Title"] = "Каталог";
+    string[] cities = { "Лондон", "Париж", "Берлин" };
+    string[] countries = { "Великобритания", "Франция", "Германия" };
 }
 
-<h3>Смартфоны</h3>
-
-@{ await Html.RenderPartialAsync("_GetMessage"); }
-
-<table class=table-condensed>
-    <tr>
-        <td>Модель</td>
-        <td>Производитель</td>
-        <td>Цена</td>
-        <td></td>
-    </tr>
-
-    @foreach (var phone in Model)
-    {
-        <tr>
-            <td>@phone.Name</td>
-            <td>@phone.Company</td>
-            <td>@phone.Price</td>
-            <td>
-                <a href=~/Home/Buy/@phone.Id>Купить</a>
-            </td>
-        </tr>
-    }
-</table>
-
-@section Footer
-{
-    Все права защищены. Site Corp. 2016.
-}
+<h3>Города</h3>
+@Html.CreateListWithTagBuilder(cities)
+<br />
+<h3>Страны</h3>
+@Html.CreateList(countries)
