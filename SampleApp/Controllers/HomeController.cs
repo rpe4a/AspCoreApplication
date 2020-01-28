@@ -53,17 +53,6 @@ namespace SampleApp.Controllers
             return Content(authData);
         }
 
-        public IActionResult AddUser(User user)
-        {
-            if (ModelState.IsValid)
-            {
-                string userInfo = $"Id: {user.Id}  Name: {user.Name}  Age: {user.Age}  HasRight: {user.HasRight}";
-                return Content(userInfo);
-            }
-
-            return Content($"Количество ошибок: {ModelState.ErrorCount}");
-        }
-
         public IActionResult GetUserAgent([FromHeader(Name = "User-Agent")] string userAgent)
         {
             return Content(userAgent);

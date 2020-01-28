@@ -29,6 +29,7 @@ namespace SampleApp.Components
             ViewBag.Users = users.Take(number);
             ViewData["Header"] = $"Количество пользователей: {number}.";
             return View();
+
         }
     }
 }
