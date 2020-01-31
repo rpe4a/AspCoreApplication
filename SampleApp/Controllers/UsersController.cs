@@ -20,9 +20,10 @@ namespace SampleApp.Controllers
         }
 
         [HttpGet]
+        [Produces("application/json")] //Данные в любом случаем будут отдаваться в формате JSON
         public async Task<ActionResult<IEnumerable<User>>> Get()
         {
-            return await db.Users.ToListAsync();
+            return new ObjectResult(await db.Users.ToListAsync());
         }
 
         // GET api/users/5
