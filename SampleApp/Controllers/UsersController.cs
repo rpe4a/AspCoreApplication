@@ -5,11 +5,13 @@ using EntitiesLib;
 using EntitiesLib.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SampleApp.Filters;
 
 namespace SampleApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [SimpleResourceFilter]
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext db;

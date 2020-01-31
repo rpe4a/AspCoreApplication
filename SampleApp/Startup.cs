@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
+using SampleApp.Filters;
 using SampleApp.Middleware;
 using SampleApp.MiddlewareExtensions;
 using SampleApp.ServiceExtensions;
@@ -50,7 +51,13 @@ namespace SampleApp
             services.AddDbContext<AppDbContext>(options => options
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddTransient<TimeService>();
-            services.AddMvc().AddXmlDataContractSerializerFormatters();
+            services.AddMvc(o =>
+            {
+                // глобально - все сервисы MVC - и контроллеры, и Razor Page
+                //o.Filters.Add<SimpleResourceFilter>();
+                //o.Filters.Add(new SimpleResourceFilter()); или так
+
+            }).AddXmlDataContractSerializerFormatters();
             services.AddControllers();
         }
 
