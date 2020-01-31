@@ -29,8 +29,17 @@ namespace EntitiesLib
                         Price = 500
                     }
                 );
-                context.SaveChanges();
             }
+
+            if (!context.Users.Any())
+            {
+                context.Users.Add(new User { Name = "Tom", Age = 26 });
+                context.Users.Add(new User { Name = "Alice", Age = 31 });
+                context.Users.Add(new User { Name = "Vasya", Age = 32 });
+                context.Users.Add(new User { Name = "Masha", Age = 11 });
+            }
+
+            context.SaveChanges();
         }
     }
 }
