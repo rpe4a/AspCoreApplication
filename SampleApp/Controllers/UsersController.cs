@@ -11,7 +11,7 @@ namespace SampleApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [SimpleResourceFilter]
+    [TypeFilter(typeof(SimpleResourceFilter), Arguments = new object[] {1, "blablabla"})]
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext db;
@@ -50,6 +50,7 @@ namespace SampleApp.Controllers
             {
                 ModelState.AddModelError("Name", "Недопустимое имя пользователя - admin");
             }
+
             // если есть лшибки - возвращаем ошибку 400
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
