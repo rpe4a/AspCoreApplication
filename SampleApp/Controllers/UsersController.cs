@@ -39,7 +39,17 @@ namespace SampleApp.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> Post(User user)
         {
-            if (user == null) return BadRequest();
+            // обработка частных случаев валидации
+            if (user.Age == 99)
+                ModelState.AddModelError("Age", "Возраст не должен быть равен 99");
+
+            if (user.Name == "admin")
+            {
+                ModelState.AddModelError("Name", "Недопустимое имя пользователя - admin");
+            }
+            // если есть лшибки - возвращаем ошибку 400
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             db.Users.Add(user);
             await db.SaveChangesAsync();
