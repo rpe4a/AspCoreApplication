@@ -64,15 +64,18 @@ namespace SampleApp.Controllers
                 if (user == null)
                 {
                     // добавляем пользователя в бд
-                    user = new AuthUser() { Email = model.Email, Password = model.Password };
-                    Role userRole = await db.Roles.FirstOrDefaultAsync(r => r.Name == "user");
-                    if (userRole != null)
-                        user.Role = userRole;
-
+                    user = new AuthUser()
+                    {
+                        Email = model.Email,
+                        Password = model.Password,
+                        Year = model.Year,
+                        City = model.City,
+                        Company = model.Company
+                    };
                     db.AuthUsers.Add(user);
                     await db.SaveChangesAsync();
 
-                    await Authenticate(user); // аутентификация
+                    await Authenticate(user);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -89,7 +92,8 @@ namespace SampleApp.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
+                new Claim(ClaimTypes.Locality, user.City),
+                new Claim("company", user.Company)
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using EntitiesLib;
@@ -57,11 +58,14 @@ namespace SampleApp
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(o =>
                 {
-                    o.LoginPath = new PathString("/Account/Login");
-                    o.AccessDeniedPath = new PathString("/Account/Login");
+                    o.LoginPath = new PathString("/Account/Register");
+                    o.AccessDeniedPath = new PathString("/Account/Register");
                 });
 
             services.AddAuthorization(opts => {
+                opts.AddPolicy("OnlyForLondon", policy => {
+                    policy.RequireClaim(ClaimTypes.Locality, "Лондон", "London");
+                });
                 opts.AddPolicy("OnlyForMicrosoft", policy => {
                     policy.RequireClaim("company", "Microsoft");
                 });

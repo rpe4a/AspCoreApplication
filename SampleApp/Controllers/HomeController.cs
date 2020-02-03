@@ -17,7 +17,6 @@ namespace SampleApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin, user")]
         public IActionResult Index()
         {
             var principal = HttpContext.User;
@@ -67,7 +66,7 @@ namespace SampleApp.Controllers
             return PartialView("_GetMessage");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Policy = "OnlyForMicrosoft")]
         public IActionResult Create()
         {
             var principal = HttpContext.User;

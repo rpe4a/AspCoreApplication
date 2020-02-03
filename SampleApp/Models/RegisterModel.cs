@@ -14,5 +14,8 @@ namespace SampleApp.Models
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Пароль введен неверно")]
         public string ConfirmPassword { get; set; }
+        public string City { get; set; }
+        public string Company { get; set; }
+        public int Year { get; set; }
     }
 }
