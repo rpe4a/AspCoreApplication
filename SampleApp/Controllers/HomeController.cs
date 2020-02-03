@@ -7,7 +7,6 @@ using SampleApp.Models;
 
 namespace SampleApp.Controllers
 {
-    //[Authorize]
     public class HomeController : Controller
     {
         private AppDbContext _context;
@@ -18,8 +17,11 @@ namespace SampleApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin, user")]
         public IActionResult Index()
         {
+            var principal = HttpContext.User;
+
             return View(_context.Phones.ToList());
         }
 
@@ -65,8 +67,10 @@ namespace SampleApp.Controllers
             return PartialView("_GetMessage");
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
+            var principal = HttpContext.User;
             return View();
         }
         [HttpPost]

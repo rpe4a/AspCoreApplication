@@ -1,5 +1,6 @@
 ﻿using EntitiesLib.Models;
 using Microsoft.EntityFrameworkCore.Internal;
+using SampleApp.Models;
 
 namespace EntitiesLib
 {

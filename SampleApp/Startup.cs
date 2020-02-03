@@ -58,13 +58,20 @@ namespace SampleApp
                 .AddCookie(o =>
                 {
                     o.LoginPath = new PathString("/Account/Login");
+                    o.AccessDeniedPath = new PathString("/Account/Login");
                 });
+
+            services.AddAuthorization(opts => {
+                opts.AddPolicy("OnlyForMicrosoft", policy => {
+                    policy.RequireClaim("company", "Microsoft");
+                });
+            });
 
             services.AddMvc(o =>
             {
                 // глобально - все сервисы MVC - и контроллеры, и Razor Page
                 //o.Filters.Add<AuthorizeFilter>();
-                o.Filters.Add(new AuthorizeFilter()); //или так
+                //o.Filters.Add(new AuthorizeFilter()); //или так
 
             }).AddXmlDataContractSerializerFormatters();
             services.AddControllers();
