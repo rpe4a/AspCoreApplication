@@ -93,7 +93,8 @@ namespace SampleApp.Controllers
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                 new Claim(ClaimTypes.Locality, user.City),
-                new Claim("company", user.Company)
+                new Claim("company", user.Company),
+                new Claim(ClaimTypes.DateOfBirth, user.Year.ToString())
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,

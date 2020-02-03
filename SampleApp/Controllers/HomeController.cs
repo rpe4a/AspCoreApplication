@@ -17,6 +17,7 @@ namespace SampleApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "AgeLimit")]
         public IActionResult Index()
         {
             var principal = HttpContext.User;

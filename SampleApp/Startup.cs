@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EntitiesLib;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +26,7 @@ using Microsoft.Extensions.Logging.Configuration;
 using SampleApp.Filters;
 using SampleApp.Middleware;
 using SampleApp.MiddlewareExtensions;
+using SampleApp.Requirement;
 using SampleApp.ServiceExtensions;
 using SampleApp.Services;
 using SampleApp.Settings;
@@ -62,6 +64,8 @@ namespace SampleApp
                     o.AccessDeniedPath = new PathString("/Account/Register");
                 });
 
+            services.AddTransient<IAuthorizationHandler, AgeHandler>();
+
             services.AddAuthorization(opts => {
                 opts.AddPolicy("OnlyForLondon", policy => {
                     policy.RequireClaim(ClaimTypes.Locality, "Лондон", "London");
@@ -69,6 +73,8 @@ namespace SampleApp
                 opts.AddPolicy("OnlyForMicrosoft", policy => {
                     policy.RequireClaim("company", "Microsoft");
                 });
+                opts.AddPolicy("AgeLimit",
+                    policy => policy.Requirements.Add(new AgeRequirement(50)));
             });
 
             services.AddMvc(o =>
