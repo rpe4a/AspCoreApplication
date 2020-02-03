@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Constraints;
@@ -62,8 +63,8 @@ namespace SampleApp
             services.AddMvc(o =>
             {
                 // глобально - все сервисы MVC - и контроллеры, и Razor Page
-                //o.Filters.Add<SimpleResourceFilter>();
-                //o.Filters.Add(new SimpleResourceFilter()); или так
+                //o.Filters.Add<AuthorizeFilter>();
+                //o.Filters.Add(new AuthorizeFilter()); //или так
 
             }).AddXmlDataContractSerializerFormatters();
             services.AddControllers();

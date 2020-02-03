@@ -1,11 +1,13 @@
 ﻿using System.Linq;
 using EntitiesLib;
 using EntitiesLib.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SampleApp.Models;
 
 namespace SampleApp.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private AppDbContext _context;
