@@ -6,6 +6,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using EntitiesLib;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -51,6 +52,13 @@ namespace SampleApp
             services.AddDbContext<AppDbContext>(options => options
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddTransient<TimeService>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o =>
+                {
+                    o.LoginPath = new PathString("/Account/Login");
+                });
+
             services.AddMvc(o =>
             {
                 // глобально - все сервисы MVC - и контроллеры, и Razor Page
@@ -73,6 +81,9 @@ namespace SampleApp
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();    // аутентификация
+            app.UseAuthorization();     // авторизация
 
             app.UseEndpoints(endpoints =>
             {
