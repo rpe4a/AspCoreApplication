@@ -7,7 +7,7 @@ using SampleApp.Models;
 
 namespace SampleApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
         private AppDbContext _context;

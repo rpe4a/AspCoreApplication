@@ -64,7 +64,7 @@ namespace SampleApp
             {
                 // глобально - все сервисы MVC - и контроллеры, и Razor Page
                 //o.Filters.Add<AuthorizeFilter>();
-                //o.Filters.Add(new AuthorizeFilter()); //или так
+                o.Filters.Add(new AuthorizeFilter()); //или так
 
             }).AddXmlDataContractSerializerFormatters();
             services.AddControllers();
