@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EntitiesLib;
 using EntitiesLib.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SampleApp.Filters;
@@ -23,6 +24,7 @@ namespace SampleApp.Controllers
 
         [HttpGet]
         [Produces("application/json")] //Данные в любом случаем будут отдаваться в формате JSON
+        [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> Get()
         {
             return new ObjectResult(await db.Users.ToListAsync());
@@ -30,6 +32,7 @@ namespace SampleApp.Controllers
 
         // GET api/users/5
         [HttpGet("{id:int}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Get(int id)
         {
             var user = await db.Users.FirstOrDefaultAsync(x => x.Id == id);
