@@ -14,6 +14,7 @@ namespace SampleApp.Filters
 
         public SimpleResourceFilter(ILoggerFactory loggerFactory, int id, string token)
         {
+            
             logger = loggerFactory.CreateLogger<SimpleResourceFilter>();
             _id = id;
             _token = token;

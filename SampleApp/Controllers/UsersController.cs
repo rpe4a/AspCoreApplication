@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EntitiesLib;
 using EntitiesLib.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SampleApp.Filters;
 
 namespace SampleApp.Controllers
@@ -16,15 +19,17 @@ namespace SampleApp.Controllers
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext db;
+        private readonly IMemoryCache _memoryCache;
 
-        public UsersController(AppDbContext context)
+        public UsersController(AppDbContext context, IMemoryCache memoryCache)
         {
             db = context;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet]
         [Produces("application/json")] //Данные в любом случаем будут отдаваться в формате JSON
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<IEnumerable<User>>> Get()
         {
             return new ObjectResult(await db.Users.ToListAsync());
@@ -32,12 +37,22 @@ namespace SampleApp.Controllers
 
         // GET api/users/5
         [HttpGet("{id:int}")]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Get(int id)
         {
-            var user = await db.Users.FirstOrDefaultAsync(x => x.Id == id);
-            if (user == null)
-                return NotFound();
+            if (!_memoryCache.TryGetValue(id, out User user))
+            {
+                user = await db.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (user == null)
+                    return NotFound();
+
+                _memoryCache.Set(user.Id, user, new MemoryCacheEntryOptions()
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
+            }
+
             return new ObjectResult(user);
         }
 

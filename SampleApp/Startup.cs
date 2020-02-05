@@ -37,31 +37,6 @@ namespace SampleApp
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddTransient<TimeService>();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(o =>
-                {
-                    o.RequireHttpsMetadata = false;
-                    o.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        // укзывает, будет ли валидироваться издатель при валидации токена
-                        ValidateIssuer = true,
-                        // строка, представляющая издателя
-                        ValidIssuer = AuthOptions.ISSUER,
-
-                        // будет ли валидироваться потребитель токена
-                        ValidateAudience = true,
-                        // установка потребителя токена
-                        ValidAudience = AuthOptions.AUDIENCE,
-                        // будет ли валидироваться время существования
-                        ValidateLifetime = true,
-
-                        // установка ключа безопасности
-                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        // валидация ключа безопасности
-                        ValidateIssuerSigningKey = true
-                    };
-                });
-
             services.AddMvc(o =>
             {
                 // глобально - все сервисы MVC - и контроллеры, и Razor Page
@@ -69,6 +44,8 @@ namespace SampleApp
                 //o.Filters.Add(new AuthorizeFilter()); //или так
             });
 
+
+            services.AddMemoryCache();
             services.AddControllers();
         }
 
@@ -81,9 +58,6 @@ namespace SampleApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthentication(); // аутентификация
-            app.UseAuthorization(); // авторизация
 
             app.UseEndpoints(endpoints =>
             {
