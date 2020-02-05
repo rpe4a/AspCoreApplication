@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.IO.Compression;
+using System.Linq;
 using EntitiesLib;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,6 +50,24 @@ namespace SampleApp
 
             services.AddMemoryCache();
             services.AddControllers();
+
+            services.AddResponseCompression(o =>
+            {
+                o.EnableForHttps = true;
+                //дополнительные миме типы для сжатия
+                o.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
+                {
+                    "image/svg+xml",
+                    "application/atom+xml"
+                });
+                o.Providers.Add<BrotliCompressionProvider>();
+                o.Providers.Add<GzipCompressionProvider>();
+            });
+
+            services.Configure<BrotliCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Fastest;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +79,8 @@ namespace SampleApp
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseResponseCompression();
 
             app.UseEndpoints(endpoints =>
             {
