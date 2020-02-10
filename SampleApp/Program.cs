@@ -43,6 +43,7 @@ namespace SampleApp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseIIS();
                     webBuilder.ConfigureLogging(config => { config.SetMinimumLevel(LogLevel.Trace); });
                 });
     }
