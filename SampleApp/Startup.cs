@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using SampleApp.JwtBearer;
 using SampleApp.Middleware;
@@ -71,6 +72,8 @@ namespace SampleApp
             {
                 options.Level = CompressionLevel.Fastest;
             });
+
+            services.AddTransient<IStringLocalizer, CustomStringLocalizer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

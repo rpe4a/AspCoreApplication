@@ -5,6 +5,7 @@ using EntitiesLib;
 using EntitiesLib.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using SampleApp.Models;
 
 namespace SampleApp.Controllers
@@ -12,16 +13,21 @@ namespace SampleApp.Controllers
     public class HomeController : Controller
     {
         private AppDbContext _context;
+        private readonly IStringLocalizer _stringLocalizer;
 
-        public HomeController(AppDbContext context)
+        public HomeController(AppDbContext context, IStringLocalizer stringLocalizer)
         {
             _context = context;
+            _stringLocalizer = stringLocalizer;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
             var principal = HttpContext.User;
+
+            ViewData["Title"] = _stringLocalizer["Header"];
+            ViewData["Message"] = _stringLocalizer["Message"];
 
             return View(_context.Phones.ToList());
         }
