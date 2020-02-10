@@ -27,13 +27,8 @@ namespace SampleApp.Controllers
         }
 
         [HttpGet]
-        public string GetCulture(string code = "")
+        public string GetCulture()
         {
-            if (!string.IsNullOrEmpty(code))
-            {
-                CultureInfo.CurrentCulture = new CultureInfo(code);
-                CultureInfo.CurrentUICulture = new CultureInfo(code);
-            }
             return $"CurrentCulture:{CultureInfo.CurrentCulture.Name}, CurrentUICulture:{CultureInfo.CurrentUICulture.Name}";
         }
 
