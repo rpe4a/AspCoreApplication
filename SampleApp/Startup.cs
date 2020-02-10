@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SampleApp.JwtBearer;
+using SampleApp.Middleware;
 using SampleApp.Services;
 
 namespace SampleApp
@@ -81,6 +82,8 @@ namespace SampleApp
             app.UseRouting();
 
             app.UseResponseCompression();
+
+            app.UseMiddleware<CultureMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

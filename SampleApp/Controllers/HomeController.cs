@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using EntitiesLib;
 using EntitiesLib.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +24,17 @@ namespace SampleApp.Controllers
             var principal = HttpContext.User;
 
             return View(_context.Phones.ToList());
+        }
+
+        [HttpGet]
+        public string GetCulture(string code = "")
+        {
+            if (!string.IsNullOrEmpty(code))
+            {
+                CultureInfo.CurrentCulture = new CultureInfo(code);
+                CultureInfo.CurrentUICulture = new CultureInfo(code);
+            }
+            return $"CurrentCulture:{CultureInfo.CurrentCulture.Name}, CurrentUICulture:{CultureInfo.CurrentUICulture.Name}";
         }
 
         [HttpGet]
