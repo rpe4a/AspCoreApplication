@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO.Compression;
@@ -6,6 +7,7 @@ using EntitiesLib;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +79,12 @@ namespace SampleApp
             services.AddTransient<IStringLocalizer, CustomStringLocalizer>();
             services.AddLocalization(o => o.ResourcesPath = "Resources");
 
-            services.AddSignalR();
+            services.AddSignalR().AddHubOptions<ChatHub>(o =>
+                {
+                    o.ClientTimeoutInterval = TimeSpan.FromMinutes(2);
+                    o.EnableDetailedErrors = true;
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -113,7 +120,13 @@ namespace SampleApp
             {
                 endpoints.MapDefaultControllerRoute();
 
-                endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapHub<ChatHub>("/chathub", o =>
+                {
+                    o.ApplicationMaxBufferSize = 64;
+                    o.TransportMaxBufferSize = 64;
+                    o.LongPolling.PollTimeout = System.TimeSpan.FromMinutes(1);
+                    o.Transports = HttpTransportType.LongPolling | HttpTransportType.WebSockets;
+                });
 
                 //endpoints.MapControllerRoute(
                 //    "default",
