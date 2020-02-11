@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "defaultProvider": "filesystem",
+  "libraries": [
+    {
+      "library": "node_modules/@microsoft/signalr/dist/browser",
+      "destination": "wwwroot/js/",
+      "files": [
+        "signalr.min.js"
+      ]
+    }
+  ]
+}

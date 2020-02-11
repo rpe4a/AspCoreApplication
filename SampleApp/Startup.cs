@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
+using SampleApp.Hubs;
 using SampleApp.JwtBearer;
 using SampleApp.Middleware;
 using SampleApp.Services;
@@ -75,6 +76,8 @@ namespace SampleApp
 
             services.AddTransient<IStringLocalizer, CustomStringLocalizer>();
             services.AddLocalization(o => o.ResourcesPath = "Resources");
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,6 +112,8 @@ namespace SampleApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+
+                endpoints.MapHub<ChatHub>("/chathub");
 
                 //endpoints.MapControllerRoute(
                 //    "default",
