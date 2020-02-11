@@ -97,6 +97,8 @@ namespace SampleApp
 
             app.UseRouting();
 
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
             app.UseResponseCompression();
 
             var supportedCultures = new[]

@@ -8,18 +8,22 @@ namespace SampleApp.Hubs
     {
         public async Task Send(string message)
         {
-            await this.Clients.All.SendAsync("Send", message).ConfigureAwait(false);
+            var context = Context;
+            var clients = Clients;
+            var groups = Groups;
+            await Clients.All.SendAsync("Receive", message, Context.ConnectionId);
         }
 
-        public override Task OnConnectedAsync()
+        public override async Task OnConnectedAsync()
         {
-            var client = this.Clients;
-            return base.OnConnectedAsync();
+            await Clients.All.SendAsync("Notify", $"{Context.ConnectionId} вошел в чат");
+            await base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
-            return base.OnDisconnectedAsync(exception);
+            await Clients.All.SendAsync("Notify", $"{Context.ConnectionId} покинул в чат");
+            await base.OnDisconnectedAsync(exception);
         }
     }
 }
