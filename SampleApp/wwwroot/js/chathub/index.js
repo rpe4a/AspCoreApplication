@@ -1,19 +1,24 @@
 ﻿const hubConnection = new signalR.HubConnectionBuilder()
-    .withUrl("/chathub")
+    .withUrl("/chathub", { transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling })
+    .configureLogging(signalR.LogLevel.Information)
     .build();
 
-hubConnection.on("Send", function (data) {
+connection.serverTimeoutInMilliseconds = 1000 * 60 * 5; //5 minutes
 
-    let elem = document.createElement("p");
-    elem.appendChild(document.createTextNode(data));
-    let firstElem = document.getElementById("chatroom").firstChild;
-    document.getElementById("chatroom").insertBefore(elem, firstElem);
+hubConnection.on("Send",
+    function(data) {
 
-});
+        let elem = document.createElement("p");
+        elem.appendChild(document.createTextNode(data));
+        let firstElem = document.getElementById("chatroom").firstChild;
+        document.getElementById("chatroom").insertBefore(elem, firstElem);
 
-document.getElementById("sendBtn").addEventListener("click", function (e) {
-    let message = document.getElementById("message").value;
-    hubConnection.invoke("Send", message);
-});
+    });
+
+document.getElementById("sendBtn").addEventListener("click",
+    function(e) {
+        let message = document.getElementById("message").value;
+        hubConnection.invoke("Send", message);
+    });
 
 hubConnection.start();
