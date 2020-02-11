@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Linq;
 using EntitiesLib;
 using EntitiesLib.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SampleApp.Models;
@@ -13,9 +12,9 @@ namespace SampleApp.Controllers
     public class HomeController : Controller
     {
         private AppDbContext _context;
-        private readonly IStringLocalizer _stringLocalizer;
+        private readonly IStringLocalizer<HomeController> _stringLocalizer;
 
-        public HomeController(AppDbContext context, IStringLocalizer stringLocalizer)
+        public HomeController(AppDbContext context, IStringLocalizer<HomeController> stringLocalizer)
         {
             _context = context;
             _stringLocalizer = stringLocalizer;
