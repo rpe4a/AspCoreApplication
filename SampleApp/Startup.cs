@@ -49,6 +49,8 @@ namespace SampleApp
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddTransient<TimeService>();
 
+            services.AddCors();
+
             services.AddMvc(o =>
             {
                 // глобально - все сервисы MVC - и контроллеры, и Razor Page
@@ -107,7 +109,7 @@ namespace SampleApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors(o => o.AllowAnyOrigin());
             app.UseAuthentication();
             app.UseAuthorization();
 
