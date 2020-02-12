@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,6 +79,8 @@ namespace SampleApp
             });
 
             services.AddTransient<IStringLocalizer, CustomStringLocalizer>();
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+
             services.AddLocalization(o => o.ResourcesPath = "Resources");
 
             services.AddSignalR().AddHubOptions<ChatHub>(o =>

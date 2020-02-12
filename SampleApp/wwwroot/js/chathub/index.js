@@ -1,5 +1,9 @@
 ﻿const hubConnection = new signalR.HubConnectionBuilder()
-    .withUrl("/chathub", { transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling })
+    .withUrl("/chathub",
+        {
+            
+            transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling
+        })
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
