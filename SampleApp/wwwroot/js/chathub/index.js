@@ -39,7 +39,14 @@ hubConnection.on('Notify',
 document.getElementById("sendBtn").addEventListener("click",
     function(e) {
         let message = document.getElementById("message").value;
-        hubConnection.invoke('Send', message);
+        hubConnection.invoke('Send', message).catch((e) => {
+            let notifyElem = document.createElement("b");
+            notifyElem.appendChild(document.createTextNode("unauthorize"));
+            let elem = document.createElement("p");
+            elem.appendChild(notifyElem);
+            var firstElem = document.getElementById("chatroom").firstChild;
+            document.getElementById("chatroom").insertBefore(elem, firstElem);
+        });
     });
 
 hubConnection.start();

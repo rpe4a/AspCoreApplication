@@ -28,10 +28,11 @@ namespace EntitiesLib
             // добавляем роли
             Role adminRole = new Role { Id = 1, Name = adminRoleName };
             Role userRole = new Role { Id = 2, Name = userRoleName };
-            var adminUser = new AuthUser() { Id = 1, Email = adminEmail, Password = adminPassword, RoleId = adminRole.Id };
+            var adminUser = new AuthUser() { Id = 1, Email = adminEmail, Password = adminPassword, RoleId = adminRole.Id, City = "Perm", Company = "Microsoft"};
+            var user = new AuthUser() { Id = 2, Email = "user@mail.ru", Password = adminPassword, RoleId = userRole.Id, City = "Perm", Company = "Microsoft" };
 
             modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole });
-            modelBuilder.Entity<AuthUser>().HasData(new AuthUser[] { adminUser });
+            modelBuilder.Entity<AuthUser>().HasData(new AuthUser[] { adminUser, user });
             base.OnModelCreating(modelBuilder);
         }
     }

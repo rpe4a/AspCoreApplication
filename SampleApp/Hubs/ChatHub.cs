@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace SampleApp.Hubs
 {
+    [Authorize]
     public class ChatHub : Hub
     {
+        [Authorize(Roles = "admin")]
         public async Task Send(string message)
         {
             var context = Context;
