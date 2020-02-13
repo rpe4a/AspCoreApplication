@@ -49,7 +49,18 @@ namespace SampleApp
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddTransient<TimeService>();
 
-            services.AddCors();
+            services.AddCors(o =>
+            {
+                o.AddPolicy("Test", builder => builder
+                    .WithOrigins("https://localhost:44321")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+
+                o.AddPolicy("Production", builder => builder
+                    .WithOrigins("http://localhost.com")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+            });
 
             services.AddMvc(o =>
             {
@@ -109,7 +120,9 @@ namespace SampleApp
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseCors(o => o.AllowAnyOrigin());
+
+            app.UseCors("Test");
+
             app.UseAuthentication();
             app.UseAuthorization();
 
