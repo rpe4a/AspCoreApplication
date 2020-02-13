@@ -6,6 +6,7 @@ using EntitiesLib.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SampleApp.Models;
+using SampleApp.Services;
 
 namespace SampleApp.Controllers
 {

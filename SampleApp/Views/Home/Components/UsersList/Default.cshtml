@@ -1,7 +1,9 @@
-﻿<h4>@ViewData["Header"]</h4>
+﻿@using EntitiesLib.Models
+
+<h4>@ViewData["Header"]</h4>
 <ul>
-    @foreach (var user in (IEnumerable<string>)ViewBag.Users)
+    @foreach (var user in (IEnumerable<User>)ViewBag.Users)
     {
-        <li>@user</li>
+        <li>@user.Name - @user.Age</li>
     }
 </ul>
