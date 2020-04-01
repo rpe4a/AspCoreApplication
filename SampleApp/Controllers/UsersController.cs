@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EntitiesLib;
 using EntitiesLib.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,8 @@ namespace SampleApp.Controllers
         //[Authorize(Roles = "admin")]
         public async Task<ActionResult<User>> Get(int id)
         {
+            throw new Exception("Boom!");
+
             if (!_memoryCache.TryGetValue(id, out User user))
             {
                 user = await db.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -99,6 +102,16 @@ namespace SampleApp.Controllers
             db.Users.Remove(user);
             await db.SaveChangesAsync();
             return Ok(user);
+        }
+
+        [Route("/error")]
+        public IActionResult Error()
+        {
+            var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+
+            return Problem(
+                detail: context.Error.StackTrace,
+                title: context.Error.Message);
         }
     }
 }

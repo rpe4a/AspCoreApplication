@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using EntitiesLib;
 using Microsoft.AspNetCore.Hosting;
@@ -14,18 +15,19 @@ namespace SampleApp
 {
     public class Program
     {
+        private static IHost _host;
+
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
+            _host = CreateHostBuilder(args).Build();
 
-            using (var scope = host.Services.CreateScope())
+            using (var scope = _host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
 
                 try
                 {
                     DbInitialize.Initialize(services.GetService<AppDbContext>());
-
                 }
                 catch (Exception e)
                 {
@@ -35,11 +37,18 @@ namespace SampleApp
                 }
             }
 
-            host.Run();
+            _host.Run();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureServices(s => { s.AddSingleton<IHostedService, LifetimeEventsHostedService>(); })
+                .ConfigureLogging(context =>
+                {
+                    context.ClearProviders();
+                    context.AddConsole();
+                })
+                .ConfigureAppConfiguration((context, builder) => { })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

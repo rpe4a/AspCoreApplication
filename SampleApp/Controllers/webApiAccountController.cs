@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using EntitiesLib.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SampleApp.JwtBearer;
@@ -11,6 +12,7 @@ using SampleApp.Models;
 
 namespace SampleApp.Controllers
 {
+    [ApiController]
     public class WebApiAccountController : Controller
     {
         // тестовые данные вместо использования базы данных
@@ -21,6 +23,7 @@ namespace SampleApp.Controllers
         };
 
         [HttpPost("/token")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK )]
         public IActionResult Token(string username, string password)
         {
             var identity = GetIdentity(username, password);

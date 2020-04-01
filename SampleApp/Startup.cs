@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -48,7 +49,8 @@ namespace SampleApp
             services.AddDbContext<AppDbContext>(options => options
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddTransient<TimeService>();
-            services.AddTransient<IUserRepository, UserRepository>(p => new UserRepository(AppConfiguration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<IUserRepository, UserRepository>(p =>
+                new UserRepository(AppConfiguration.GetConnectionString("DefaultConnection")));
 
             services.AddCors(o =>
             {
@@ -115,8 +117,10 @@ namespace SampleApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment()) app.UseExceptionHandler("/error");
+            //else app.UseExceptionHandler("/error");
 
+            var server = app.ServerFeatures.Get<IServerAddressesFeature>();
 
             app.UseStaticFiles();
 
